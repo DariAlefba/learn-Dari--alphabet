@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Маленькие буквы алфавита дари</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .alphabet {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;  /* Увеличен отступ между буквами */
+            margin-top: 20px;
+        }
+
+        .letter {
+            display: flex;
+            flex-direction: column; /* Буквы и их вариации будут располагаться друг под другом */
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: auto;
+            border: 2px solid #666;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            padding: 10px;
+        }
+
+        .letter:active {
+            background-color: #d1e7fd;
+        }
+
+        .variation {
+            font-size: 20px; /* Уменьшил размер вариаций */
+            margin-top: 5px; /* Добавил отступ между вариациями */
+            cursor: pointer;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #pronunciation {
+            margin-top: 10px;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            margin-top: 20px;
+            background-color: #fff;
+            cursor: crosshair;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Маленькие буквы алфавита дари</h1>
+    <p>Нажмите на маленькую букву или её вариацию для выбора!</p>
+
+    <div class="alphabet" id="smallAlphabet"></div>
+
+    <div id="output"></div>
+    <div id="pronunciation"></div>
+
+    <h2>Обведите букву</h2>
+    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+    <p><button id="clearCanvas">Очистить</button></p>
+
+    <script>
+        // Маленькие буквы дари с их вариациями
+        const smallAlphabet = [
+            { letter: 'ا', variations: ['ا', 'ٱ', 'آ'], description: 'Алиф' },
+            { letter: 'ب', variations: ['ب', 'بـ', 'ـب', 'ـبـ'], description: 'Бе' },
+            { letter: 'پ', variations: ['پ', 'پـ', 'ـپ', 'ـپـ'], description: 'Пе' },
+            { letter: 'ت', variations: ['ت', 'تـ', 'ـت', 'ـتـ'], description: 'Те' },
+            { letter: 'ث', variations: ['ث', 'ثـ', 'ـث', 'ـثـ'], description: 'Се' },
+            { letter: 'ج', variations: ['ج', 'جـ', 'ـج', 'ـجـ'], description: 'Джим' },
+            { letter: 'چ', variations: ['چ', 'چـ', 'ـچ', 'ـچـ'], description: 'Че' },
+            { letter: 'ح', variations: ['ح', 'حـ', 'ـح', 'ـحـ'], description: 'Ха' },
+            { letter: 'خ', variations: ['خ', 'خـ', 'ـخ', 'ـخـ'], description: 'Хе' },
+            { letter: 'د', variations: ['د', 'دـ', 'ـد', 'ـدـ'], description: 'Дал' },
+            { letter: 'ذ', variations: ['ذ', 'ذـ', 'ـذ', 'ـذـ'], description: 'Зал' },
+            { letter: 'ر', variations: ['ر', 'رـ', 'ـر', 'ـرـ'], description: 'Ре' },
+            { letter: 'ز', variations: ['ز', 'زـ', 'ـز', 'ـزـ'], description: 'Зе' },
+            { letter: 'ژ', variations: ['ژ', 'ژـ', 'ـژ', 'ـژـ'], description: 'Же' },
+            { letter: 'س', variations: ['س', 'سـ', 'ـس', 'ـسـ'], description: 'Син' },
+            { letter: 'ش', variations: ['ش', 'شـ', 'ـش', 'ـشـ'], description: 'Шин' },
+            { letter: 'ص', variations: ['ص', 'صـ', 'ـص', 'ـصـ'], description: 'Сад' },
+            { letter: 'ض', variations: ['ض', 'ضـ', 'ـض', 'ـضـ'], description: 'Зад' },
+            { letter: 'ط', variations: ['ط', 'طـ', 'ـط', 'ـطـ'], description: 'То' },
+            { letter: 'ظ', variations: ['ظ', 'ظـ', 'ـظ', 'ـظـ'], description: 'Зо' },
+            { letter: 'ع', variations: ['ع', 'عـ', 'ـع', 'ـعـ'], description: 'Айн' },
+            { letter: 'غ', variations: ['غ', 'غـ', 'ـغ', 'ـغـ'], description: 'Гайн' },
+            { letter: 'ف', variations: ['ف', 'فـ', 'ـف', 'ـفـ'], description: 'Фе' },
+            { letter: 'ق', variations: ['ق', 'قـ', 'ـق', 'ـقـ'], description: 'Каф' },
+            { letter: 'ک', variations: ['ک', 'کـ', 'ـک', 'ـکـ'], description: 'Каф' },
+            { letter: 'گ', variations: ['گ', 'گـ', 'ـگ', 'ـگـ'], description: 'Гаф' },
+            { letter: 'ل', variations: ['ل', 'لـ', 'ـل', 'ـلـ'], description: 'Лам' },
+            { letter: 'م', variations: ['م', 'مـ', 'ـم', 'ـمـ'], description: 'Мим' },
+            { letter: 'ن', variations: ['ن', 'نـ', 'ـن', 'ـنـ'], description: 'Нун' },
+            { letter: 'و', variations: ['و', 'وـ', 'ـو', 'ـوـ'], description: 'Вау' },
+            { letter: 'ه', variations: ['ه', 'هـ', 'ـه', 'ـهـ'], description: 'Хе' },
+            { letter: 'ی', variations: ['ی', 'یـ', 'ـی', 'ـیـ'], description: 'Йе' },
+        ];
+
+        const smallAlphabetContainer = document.getElementById('smallAlphabet');
+        const output = document.getElementById('output');
+        const pronunciation = document.getElementById('pronunciation');
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let selectedLetter = null;
+        let isDrawing = false;
+
+        // Добавляем маленькие буквы дари с их вариациями
+        smallAlphabet.forEach(item => {
+            const letterDiv = document.createElement('div');
+            letterDiv.className = 'letter';
+            letterDiv.textContent = item.letter;
+
+            // Добавляем вариации
+            item.variations.forEach(variation => {
+                const variationDiv = document.createElement('div');
+                variationDiv.className = 'variation';
+                variationDiv.textContent = variation;
+                
+                variationDiv.addEventListener('click', () => {
+                    selectedLetter = variation;
+                    output.textContent = `Выбрана: ${variation}`;
+                    pronunciation.textContent = `Произносится: ${item.description}`;
+                    drawTemplate(variation);
+                });
+
+                letterDiv.appendChild(variationDiv);
+            });
+
+            smallAlphabetContainer.appendChild(letterDiv);
+        });
+
+        // Рисуем выбранную букву или цифру
+        function drawTemplate(symbol) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '200px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.globalAlpha = 0.2;
+            ctx.fillText(symbol, canvas.width / 2, canvas.height / 2);
+            ctx.globalAlpha = 1.0;
+        }
+
+        // Начало рисования
+        function startDrawing(event) {
+            isDrawing = true;
+            const pos = event.type === 'mousedown'
+                ? { x: event.offsetX, y: event.offsetY }
+                : getTouchPos(canvas, event);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        // Рисование
+        function draw(event) {
+            if (!isDrawing) return;
+            const pos = event.type === 'mousemove'
+                ? { x: event.offsetX, y: event.offsetY }
+                : getTouchPos(canvas, event);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 8;
+            ctx.stroke();
+        }
+
+        // Завершение рисования
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.closePath();
+        }
+
+        function getTouchPos(canvas, touchEvent) {
+            const rect = canvas.getBoundingClientRect();
+            const touch = touchEvent.touches[0];
+            return {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            };
+        }
+
+        // Очистка холста
+        document.getElementById('clearCanvas').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+    </script>
+</body>
+</html>
