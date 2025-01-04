@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изучение алфавита дари</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .alphabet {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .letter {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #666;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .letter:active {
+            background-color: #d1e7fd;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Изучение алфавита дари</h1>
+    <p>Нажмите на букву, чтобы выбрать её для обведения!</p>
+
+    <div class="alphabet" id="alphabet"></div>
+
+    <div id="output"></div>
+
+    <h2>Обведите букву</h2>
+    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+    <p><button id="clearCanvas">Очистить</button></p>
+
+    <script>
+        // Алфавит дари
+        const alphabet = [
+            { letter: 'ا', description: 'Алиф (А)' },
+            { letter: 'ب', description: 'Бе (Б)' },
+            { letter: 'پ', description: 'Пе (П)' },
+            { letter: 'ت', description: 'Те (Т)' },
+            { letter: 'ث', description: 'Се (С)' },
+            { letter: 'ج', description: 'Джим (Дж)' },
+            { letter: 'چ', description: 'Че (Ч)' },
+            { letter: 'ح', description: 'Ха (Х)' },
+            { letter: 'خ', description: 'Хе (Х)' },
+            { letter: 'د', description: 'Дал (Д)' },
+            { letter: 'ذ', description: 'Зал (З)' },
+            { letter: 'ر', description: 'Ре (Р)' },
+            { letter: 'ز', description: 'Зе (З)' },
+            { letter: 'ژ', description: 'Же (Ж)' },
+            { letter: 'س', description: 'Син (С)' },
+            { letter: 'ش', description: 'Шин (Ш)' },
+            { letter: 'ص', description: 'Сад (С)' },
+            { letter: 'ض', description: 'Зад (З)' },
+            { letter: 'ط', description: 'То (Т)' },
+            { letter: 'ظ', description: 'Зо (З)' },
+            { letter: 'ع', description: 'Айн (\'А)' },
+            { letter: 'غ', description: 'Гайн (Г)' },
+            { letter: 'ف', description: 'Фе (Ф)' },
+            { letter: 'ق', description: 'Каф (К)' },
+            { letter: 'ک', description: 'Каф (К)' },
+            { letter: 'گ', description: 'Гаф (Г)' },
+            { letter: 'ل', description: 'Лам (Л)' },
+            { letter: 'م', description: 'Мим (М)' },
+            { letter: 'ن', description: 'Нун (Н)' },
+            { letter: 'و', description: 'Вау (В)' },
+            { letter: 'ه', description: 'Хе (Х)' },
+            { letter: 'ی', description: 'Йе (Й)' },
+        ];
+
+        const alphabetContainer = document.getElementById('alphabet');
+        const output = document.getElementById('output');
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let selectedLetter = null;
+        let isDrawing = false;
+
+        // Добавляем буквы алфавита
+        alphabet.forEach(item => {
+            const letterDiv = document.createElement('div');
+            letterDiv.className = 'letter';
+            letterDiv.textContent = item.letter;
+
+            letterDiv.addEventListener('click', () => {
+                selectedLetter = item.letter;
+                output.textContent = `Обведите букву: ${item.letter}`;
+                drawTemplate(item.letter); // Рисуем шаблон буквы
+            });
+
+            alphabetContainer.appendChild(letterDiv);
+        });
+
+        // Рисуем выбранную букву на холсте
+        function drawTemplate(letter) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем холст
+            ctx.font = '200px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.globalAlpha = 0.2; // Полупрозрачный цвет для шаблона
+            ctx.fillText(letter, canvas.width / 2, canvas.height / 2);
+            ctx.globalAlpha = 1.0; // Восстанавливаем непрозрачность для рисования
+        }
+
+        // Рисование пользователем
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
+        canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function startDrawing(event) {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+        }
+
+        function draw(event) {
+            if (!isDrawing) return;
+            ctx.lineTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.closePath();
+        }
+
+        // Очистка холста
+        document.getElementById('clearCanvas').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (selectedLetter) drawTemplate(selectedLetter); // Перерисовываем шаблон
+        });
+    </script>
+</body>
+</html>
