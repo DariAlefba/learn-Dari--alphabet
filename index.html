@@ -3,65 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoofdpagina</title>
+    <title>Leer het Dari Alfabet</title>
     <style>
         body {
-            font-family: 'Tahoma', sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
+            background-color: #f4f4f9;
+            color: #333;
         }
-        .wrapped {
-            font-size: 30px;
-            font-weight: bold;
-            padding: 10px;
-            border: 2px solid #000;
-            display: inline-block;
-            margin: 5px;
-        }
-        .container {
+
+        .alphabet, .numbers {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .letter, .number {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #666;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .letter:active, .number:active {
+            background-color: #d1e7fd;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #pronunciation {
+            margin-top: 10px;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            margin-top: 20px;
+            background-color: #fff;
+            cursor: crosshair;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Welkom op de hoofdpagina!</h1>
-    <p>Dit is een voorbeeld van de hoofdpagina met Perzische letters (Dari).</p>
-    <div class="container">
-        <span class="wrapped">ا</span>
-        <span class="wrapped">ب</span>
-        <span class="wrapped">پ</span>
-        <span class="wrapped">ت</span>
-        <span class="wrapped">ث</span>
-        <span class="wrapped">ج</span>
-        <span class="wrapped">چ</span>
-        <span class="wrapped">ح</span>
-        <span class="wrapped">خ</span>
-        <span class="wrapped">د</span>
-        <span class="wrapped">ذ</span>
-        <span class="wrapped">ر</span>
-        <span class="wrapped">ز</span>
-        <span class="wrapped">ژ</span>
-        <span class="wrapped">س</span>
-        <span class="wrapped">ش</span>
-        <span class="wrapped">ص</span>
-        <span class="wrapped">ض</span>
-        <span class="wrapped">ط</span>
-        <span class="wrapped">ظ</span>
-        <span class="wrapped">ع</span>
-        <span class="wrapped">غ</span>
-        <span class="wrapped">ف</span>
-        <span class="wrapped">ق</span>
-        <span class="wrapped">ک</span>
-        <span class="wrapped">گ</span>
-        <span class="wrapped">ل</span>
-        <span class="wrapped">م</span>
-        <span class="wrapped">ن</span>
-        <span class="wrapped">و</span>
-        <span class="wrapped">ه</span>
-        <span class="wrapped">ی</span>
-    </div>
+    <h1>Leer het Dari Alfabet</h1>
+    <p>Klik op een letter of cijfer om deze te selecteren voor het omtrekken!</p>
+
+    <div class="alphabet" id="alphabet"></div>
+    <div class="numbers" id="numbers"></div>
+
+    <div id="output"></div>
+    <div id="pronunciation"></div>
+
+    <h2>Omtrekken</h2>
+    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+    <p><button id="clearCanvas">Wis</button></p>
+
+    <script>
+        const alphabet = [
+            { letter: 'ا', description: 'Alif (A)' },
+            { letter: 'ب', description: 'Be (B)' },
+            { letter: 'پ', description: 'Pe (P)' },
+            { letter: 'ت', description: 'Te (T)' },
+            { letter: 'ث', description: 'Se (S)' },
+            { letter: 'ج', description: 'Jim (Dj)' },
+            { letter: 'چ', description: 'Che (Ch)' },
+            { letter: 'ح', description: 'He (H)' },
+            { letter: 'خ', description: 'Khe (Kh)' },
+            { letter: 'د', description: 'Dal (D)' },
+            { letter: 'ذ', description: 'Zal (Z)' },
+            { letter: 'ر', description: 'Re (R)' },
+            { letter: 'ز', description: 'Ze (Z)' },
+            { letter: 'ژ', description: 'Zhe (Zh)' },
+            { letter: 'س', description: 'Sin (S)' },
+            { letter: 'ش', description: 'Shin (Sh)' },
+            { letter: 'ص', description: 'Sad (S)' },
+            { letter: 'ض', description: 'Zad (Z)' },
+            { letter: 'ط', description: 'To (T)' },
+            { letter: 'ظ', description: 'Zo (Z)' },
+            { letter: 'ع', description: 'Ayn (\''A)' },
+            { letter: 'غ', description: 'Ghain (Gh)' },
+            { letter: 'ف', description: 'Fe (F)' },
+            { letter: 'ق', description: 'Qaf (K)' },
+            { letter: 'ک', description: 'Kaf (K)' },
+            { letter: 'گ', description: 'Gaf (G)' },
+            { letter: 'ل', description: 'Lam (L)' },
+            { letter: 'م', description: 'Mim (M)' },
+            { letter: 'ن', description: 'Nun (N)' },
+            { letter: 'و', description: 'Vav (V)' },
+            { letter: 'ه', description: 'He (H)' },
+            { letter: 'ی', description: 'Ye (Y)' },
+        ];
+
+        const numbers = [
+            { number: '۰', description: 'Sifr (0)' },
+            { number: '۱', description: 'Yak (1)' },
+            { number: '۲', description: 'Du (2)' },
+            { number: '۳', description: 'Se (3)' },
+            { number: '۴', description: 'Chor (4)' },
+            { number: '۵', description: 'Panj (5)' },
+            { number: '۶', description: 'Shash (6)' },
+            { number: '۷', description: 'Aft (7)' },
+            { number: '۸', description: 'Asht (8)' },
+            { number: '۹', description: 'Nu (9)' },
+        ];
+
+        const alphabetContainer = document.getElementById('alphabet');
+        const numbersContainer = document.getElementById('numbers');
+        const output = document.getElementById('output');
+        const pronunciation = document.getElementById('pronunciation');
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let selectedLetter = null;
+        let isDrawing = false;
+        let penWidth = 8;
+
+        // Voeg de letters van het alfabet toe
+        alphabet.forEach(item => {
+            const letterDiv = document.createElement('div');
+            letterDiv.className = 'letter';
+            letterDiv.textContent = item.letter;
+
+            letterDiv.addEventListener('click', () => {
+                selectedLetter = item.letter;
+                output.textContent = `Gekozen: ${item.letter}`;
+                pronunciation.textContent = `Uitgesproken als: ${item.description}`;
+                drawTemplate(item.letter);
+            });
+
+            alphabetContainer.appendChild(letterDiv);
+        });
+
+        // Voeg de perzische cijfers toe
+        numbers.forEach(item => {
+            const numberDiv = document.createElement('div');
+            numberDiv.className = 'number';
+            numberDiv.textContent = item.number;
+
+            numberDiv.addEventListener('click', () => {
+                selectedLetter = item.number;
+                output.textContent = `Gekozen: ${item.number}`;
+                pronunciation.textContent = `Uitgesproken als: ${item.description}`;
+                drawTemplate(item.number);
+            });
+
+            numbersContainer.appendChild(numberDiv);
+        });
+
+        // Teken de geselecteerde letter of cijfer
+        function drawTemplate(symbol) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '200px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.globalAlpha = 0.2;
+            ctx.fillText(symbol, canvas.width / 2, canvas.height / 2);
+            ctx.globalAlpha = 1.0;
+        }
+
+        // Begin met tekenen
+        function startDrawing(event) {
+            isDrawing = true;
+            const pos = event.type === 'mousedown'
+                ? { x: event.offsetX, y: event.offsetY }
+                : getTouchPos(canvas, event);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        // Teken
+        function draw(event) {
+            if (!isDrawing) return;
+            const pos = event.type === 'mousemove'
+                ? { x: event.offsetX, y: event.offsetY }
+                : getTouchPos(canvas, event);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = penWidth;
+            ctx.stroke();
+        }
+
+        // Stop met tekenen
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.closePath();
+        }
+
+        function getTouchPos(canvas, touchEvent) {
+            const rect = canvas.getBoundingClientRect();
+            const touch = touchEvent.touches[0];
+            return {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            };
+        }
+
+        // Muis-gebeurtenissen
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch-gebeurtenissen
+        canvas.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            startDrawing(event);
+        });
+
+        canvas.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            draw(event);
+        });
+
+        canvas.addEventListener('touchend', (event) => {
+            event.preventDefault();
+            stopDrawing();
+        });
+
+        // Wis het canvas
+        document.getElementById('clearCanvas').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (selectedLetter) drawTemplate(selectedLetter);
+        });
+    </script>
 </body>
 </html>
