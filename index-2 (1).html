@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изучение алфавита дари</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .alphabet, .numbers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .letter, .number {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #666;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .letter:active, .number:active {
+            background-color: #d1e7fd;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #pronunciation {
+            margin-top: 10px;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            margin-top: 20px;
+            background-color: #fff;
+            cursor: crosshair; /* Устанавливаем курсор в виде крестика */
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Изучение алфавита дари</h1>
+    <p>Нажмите на букву или цифру, чтобы выбрать её для обведения!</p>
+
+    <div class="alphabet" id="alphabet"></div>
+    <div class="numbers" id="numbers"></div>
+
+    <div id="output"></div>
+    <div id="pronunciation"></div>
+
+    <h2>Обведи</h2>
+    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+    <p><button id="clearCanvas">Очистить</button></p>
+
+    <script>
+        // Алфавит дари
+        const alphabet = [
+            { letter: 'ا', description: 'Алиф (А)' },
+            { letter: 'ب', description: 'Бе (Б)' },
+            { letter: 'پ', description: 'Пе (П)' },
+            { letter: 'ت', description: 'Те (Т)' },
+            { letter: 'ث', description: 'Се (С)' },
+            { letter: 'ج', description: 'Джим (Дж)' },
+            { letter: 'چ', description: 'Че (Ч)' },
+            { letter: 'ح', description: 'Ха (Х)' },
+            { letter: 'خ', description: 'Хе (Х)' },
+            { letter: 'د', description: 'Дал (Д)' },
+            { letter: 'ذ', description: 'Зал (З)' },
+            { letter: 'ر', description: 'Ре (Р)' },
+            { letter: 'ز', description: 'Зе (З)' },
+            { letter: 'ژ', description: 'Же (Ж)' },
+            { letter: 'س', description: 'Син (С)' },
+            { letter: 'ش', description: 'Шин (Ш)' },
+            { letter: 'ص', description: 'Сад (С)' },
+            { letter: 'ض', description: 'Зад (З)' },
+            { letter: 'ط', description: 'То (Т)' },
+            { letter: 'ظ', description: 'Зо (З)' },
+            { letter: 'ع', description: 'Айн (\'А)' },
+            { letter: 'غ', description: 'Гайн (Г)' },
+            { letter: 'ف', description: 'Фе (Ф)' },
+            { letter: 'ق', description: 'Каф (К)' },
+            { letter: 'ک', description: 'Каф (К)' },
+            { letter: 'گ', description: 'Гаф (Г)' },
+            { letter: 'ل', description: 'Лам (Л)' },
+            { letter: 'م', description: 'Мим (М)' },
+            { letter: 'ن', description: 'Нун (Н)' },
+            { letter: 'و', description: 'Вау (В)' },
+            { letter: 'ه', description: 'Хе (Х)' },
+            { letter: 'ی', description: 'Йе (Й)' },
+        ];
+
+        // Персидские цифры
+        const numbers = [
+            { number: '۰', description: 'Сифр (0)' },
+            { number: '۱', description: 'Як (1)' },
+            { number: '۲', description: 'Ду (2)' },
+            { number: '۳', description: 'Се (3)' },
+            { number: '۴', description: 'Чор (4)' },
+            { number: '۵', description: 'Панч (5)' },
+            { number: '۶', description: 'Шаш (6)' },
+            { number: '۷', description: 'Афт (7)' },
+            { number: '۸', description: 'Ашт (8)' },
+            { number: '۹', description: 'Ну (9)' },
+        ];
+
+        const alphabetContainer = document.getElementById('alphabet');
+        const numbersContainer = document.getElementById('numbers');
+        const output = document.getElementById('output');
+        const pronunciation = document.getElementById('pronunciation');
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let selectedLetter = null;
+        let isDrawing = false;
+
+        // Добавляем буквы алфавита
+        alphabet.forEach(item => {
+            const letterDiv = document.createElement('div');
+            letterDiv.className = 'letter';
+            letterDiv.textContent = item.letter;
+
+            letterDiv.addEventListener('click', () => {
+                selectedLetter = item.letter;
+                output.textContent = `Выбрана: ${item.letter}`;
+                pronunciation.textContent = `Произносится: ${item.description}`;
+                drawTemplate(item.letter); // Рисуем шаблон буквы
+            });
+
+            alphabetContainer.appendChild(letterDiv);
+        });
+
+        // Добавляем персидские цифры
+        numbers.forEach(item => {
+            const numberDiv = document.createElement('div');
+            numberDiv.className = 'number';
+            numberDiv.textContent = item.number;
+
+            numberDiv.addEventListener('click', () => {
+                selectedLetter = item.number;
+                output.textContent = `Выбрана: ${item.number}`;
+                pronunciation.textContent = `Произносится: ${item.description}`;
+                drawTemplate(item.number); // Рисуем шаблон цифры
+            });
+
+            numbersContainer.appendChild(numberDiv);
+        });
+
+        // Рисуем выбранную букву или цифру на холсте
+        function drawTemplate(symbol) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем холст
+            ctx.font = '200px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.globalAlpha = 0.2; // Полупрозрачный цвет для шаблона
+            ctx.fillText(symbol, canvas.width / 2, canvas.height / 2);
+            ctx.globalAlpha = 1.0; // Восстанавливаем непрозрачность для рисования
+        }
+
+        // Рисование пользователем
+        canvas.addEventListener('mousedown', (event) => {
+            isDrawing = true;
+            canvas.style.cursor = 'url(https://www.gstatic.com/avatargames/misc/drawing-cursor.png), auto'; // Курсор кисточки
+            ctx.beginPath();
+            ctx.moveTo(event.offsetX, event.offsetY);
+        });
+
+        canvas.addEventListener('mousemove', (event) => {
+            if (!isDrawing) return;
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+            canvas.style.cursor = 'crosshair'; // Восстанавливаем курсор крестика
+            ctx.closePath();
+        });
+
+        canvas.addEventListener('mouseout', () => {
+            isDrawing = false;
+            canvas.style.cursor = 'crosshair'; // Восстанавливаем курсор крестика
+        });
+
+        // Очистка холста
+        document.getElementById('clearCanvas').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (selectedLetter) drawTemplate(selectedLetter); // Перерисовываем шаблон
+        });
+    </script>
+</body>
+</html>
