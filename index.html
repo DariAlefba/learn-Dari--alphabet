@@ -50,14 +50,11 @@
     <h1>Изучение алфавита дари</h1>
     <p>Нажмите на букву, чтобы узнать больше о ней!</p>
 
-    <div class="alphabet" id="alphabet">
-        <!-- Буквы будут динамически добавлены через JavaScript -->
-    </div>
+    <div class="alphabet" id="alphabet"></div>
 
     <div id="output"></div>
 
     <script>
-        // Массив букв алфавита дари и их описаний
         const alphabet = [
             { letter: 'ا', description: 'Алиф (А)' },
             { letter: 'ب', description: 'Бе (Б)' },
@@ -79,7 +76,7 @@
             { letter: 'ض', description: 'Зад (З)' },
             { letter: 'ط', description: 'То (Т)' },
             { letter: 'ظ', description: 'Зо (З)' },
-            { letter: 'ع', description: 'Айн ('А)' },
+            { letter: 'ع', description: 'Айн (\'А)' },
             { letter: 'غ', description: 'Гайн (Г)' },
             { letter: 'ف', description: 'Фе (Ф)' },
             { letter: 'ق', description: 'Каф (К)' },
@@ -96,13 +93,11 @@
         const alphabetContainer = document.getElementById('alphabet');
         const output = document.getElementById('output');
 
-        // Создаем элементы букв и добавляем их на страницу
         alphabet.forEach(item => {
             const letterDiv = document.createElement('div');
             letterDiv.className = 'letter';
             letterDiv.textContent = item.letter;
 
-            // Добавляем обработчик клика
             letterDiv.addEventListener('click', () => {
                 output.textContent = `${item.letter}: ${item.description}`;
             });
