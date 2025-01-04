@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест Canvas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        canvas {
+            border: 2px solid black;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест Canvas</h1>
+    <canvas id="testCanvas" width="400" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById('testCanvas');
+        const ctx = canvas.getContext('2d');
+        const testLetter = 'ب'; // Пример буквы
+
+        ctx.font = '200px "Noto Sans Arabic"';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(testLetter, canvas.width / 2, canvas.height / 2);
+    </script>
+</body>
+</html>
