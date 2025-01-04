@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leer het Dari Alfabet</title>
+    <title>Изучение алфавита дари</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,8 +67,8 @@
     </style>
 </head>
 <body>
-    <h1>Leer het Dari Alfabet</h1>
-    <p>Klik op een letter of cijfer om deze te selecteren voor het omtrekken!</p>
+    <h1>Изучение алфавита дари</h1>
+    <p>Нажмите на букву или цифру, чтобы выбрать её для обведения!</p>
 
     <div class="alphabet" id="alphabet"></div>
     <div class="numbers" id="numbers"></div>
@@ -76,57 +76,57 @@
     <div id="output"></div>
     <div id="pronunciation"></div>
 
-    <h2>Omtrekken</h2>
+    <h2>Обведи</h2>
     <canvas id="drawingCanvas" width="400" height="300"></canvas>
-    <p><button id="clearCanvas">Wis</button></p>
+    <p><button id="clearCanvas">Очистить</button></p>
 
     <script>
         const alphabet = [
-            { letter: 'ا', description: 'Alif (A)' },
-            { letter: 'ب', description: 'Be (B)' },
-            { letter: 'پ', description: 'Pe (P)' },
-            { letter: 'ت', description: 'Te (T)' },
-            { letter: 'ث', description: 'Se (S)' },
-            { letter: 'ج', description: 'Jim (Dj)' },
-            { letter: 'چ', description: 'Che (Ch)' },
-            { letter: 'ح', description: 'He (H)' },
-            { letter: 'خ', description: 'Khe (Kh)' },
-            { letter: 'د', description: 'Dal (D)' },
-            { letter: 'ذ', description: 'Zal (Z)' },
-            { letter: 'ر', description: 'Re (R)' },
-            { letter: 'ز', description: 'Ze (Z)' },
-            { letter: 'ژ', description: 'Zhe (Zh)' },
-            { letter: 'س', description: 'Sin (S)' },
-            { letter: 'ش', description: 'Shin (Sh)' },
-            { letter: 'ص', description: 'Sad (S)' },
-            { letter: 'ض', description: 'Zad (Z)' },
-            { letter: 'ط', description: 'To (T)' },
-            { letter: 'ظ', description: 'Zo (Z)' },
-            { letter: 'ع', description: 'Ayn (\''A)' },
-            { letter: 'غ', description: 'Ghain (Gh)' },
-            { letter: 'ف', description: 'Fe (F)' },
-            { letter: 'ق', description: 'Qaf (K)' },
-            { letter: 'ک', description: 'Kaf (K)' },
-            { letter: 'گ', description: 'Gaf (G)' },
-            { letter: 'ل', description: 'Lam (L)' },
-            { letter: 'م', description: 'Mim (M)' },
-            { letter: 'ن', description: 'Nun (N)' },
-            { letter: 'و', description: 'Vav (V)' },
-            { letter: 'ه', description: 'He (H)' },
-            { letter: 'ی', description: 'Ye (Y)' },
+            { letter: 'ا', description: 'Алиф (А)' },
+            { letter: 'ب', description: 'Бе (Б)' },
+            { letter: 'پ', description: 'Пе (П)' },
+            { letter: 'ت', description: 'Те (Т)' },
+            { letter: 'ث', description: 'Се (С)' },
+            { letter: 'ج', description: 'Джим (Дж)' },
+            { letter: 'چ', description: 'Че (Ч)' },
+            { letter: 'ح', description: 'Ха (Х)' },
+            { letter: 'خ', description: 'Хе (Х)' },
+            { letter: 'د', description: 'Дал (Д)' },
+            { letter: 'ذ', description: 'Зал (З)' },
+            { letter: 'ر', description: 'Ре (Р)' },
+            { letter: 'ز', description: 'Зе (З)' },
+            { letter: 'ژ', description: 'Же (Ж)' },
+            { letter: 'س', description: 'Син (С)' },
+            { letter: 'ش', description: 'Шин (Ш)' },
+            { letter: 'ص', description: 'Сад (С)' },
+            { letter: 'ض', description: 'Зад (З)' },
+            { letter: 'ط', description: 'То (Т)' },
+            { letter: 'ظ', description: 'Зо (З)' },
+            { letter: 'ع', description: 'Айн (\'А)' },
+            { letter: 'غ', description: 'Гайн (Г)' },
+            { letter: 'ف', description: 'Фе (Ф)' },
+            { letter: 'ق', description: 'Каф (К)' },
+            { letter: 'ک', description: 'Каф (К)' },
+            { letter: 'گ', description: 'Гаф (Г)' },
+            { letter: 'ل', description: 'Лам (Л)' },
+            { letter: 'م', description: 'Мим (М)' },
+            { letter: 'ن', description: 'Нун (Н)' },
+            { letter: 'و', description: 'Вау (В)' },
+            { letter: 'ه', description: 'Хе (Х)' },
+            { letter: 'ی', description: 'Йе (Й)' },
         ];
 
         const numbers = [
-            { number: '۰', description: 'Sifr (0)' },
-            { number: '۱', description: 'Yak (1)' },
-            { number: '۲', description: 'Du (2)' },
-            { number: '۳', description: 'Se (3)' },
-            { number: '۴', description: 'Chor (4)' },
-            { number: '۵', description: 'Panj (5)' },
-            { number: '۶', description: 'Shash (6)' },
-            { number: '۷', description: 'Aft (7)' },
-            { number: '۸', description: 'Asht (8)' },
-            { number: '۹', description: 'Nu (9)' },
+            { number: '۰', description: 'Сифр (0)' },
+            { number: '۱', description: 'Як (1)' },
+            { number: '۲', description: 'Ду (2)' },
+            { number: '۳', description: 'Се (3)' },
+            { number: '۴', description: 'Чор (4)' },
+            { number: '۵', description: 'Панч (5)' },
+            { number: '۶', description: 'Шаш (6)' },
+            { number: '۷', description: 'Афт (7)' },
+            { number: '۸', description: 'Ашт (8)' },
+            { number: '۹', description: 'Ну (9)' },
         ];
 
         const alphabetContainer = document.getElementById('alphabet');
@@ -139,7 +139,7 @@
         let isDrawing = false;
         let penWidth = 8;
 
-        // Voeg de letters van het alfabet toe
+        // Добавляем буквы алфавита
         alphabet.forEach(item => {
             const letterDiv = document.createElement('div');
             letterDiv.className = 'letter';
@@ -147,15 +147,15 @@
 
             letterDiv.addEventListener('click', () => {
                 selectedLetter = item.letter;
-                output.textContent = `Gekozen: ${item.letter}`;
-                pronunciation.textContent = `Uitgesproken als: ${item.description}`;
+                output.textContent = `Выбрана: ${item.letter}`;
+                pronunciation.textContent = `Произносится: ${item.description}`;
                 drawTemplate(item.letter);
             });
 
             alphabetContainer.appendChild(letterDiv);
         });
 
-        // Voeg de perzische cijfers toe
+        // Добавляем персидские цифры
         numbers.forEach(item => {
             const numberDiv = document.createElement('div');
             numberDiv.className = 'number';
@@ -163,15 +163,15 @@
 
             numberDiv.addEventListener('click', () => {
                 selectedLetter = item.number;
-                output.textContent = `Gekozen: ${item.number}`;
-                pronunciation.textContent = `Uitgesproken als: ${item.description}`;
+                output.textContent = `Выбрана: ${item.number}`;
+                pronunciation.textContent = `Произносится: ${item.description}`;
                 drawTemplate(item.number);
             });
 
             numbersContainer.appendChild(numberDiv);
         });
 
-        // Teken de geselecteerde letter of cijfer
+        // Рисуем выбранную букву или цифру
         function drawTemplate(symbol) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.font = '200px Arial';
@@ -182,7 +182,7 @@
             ctx.globalAlpha = 1.0;
         }
 
-        // Begin met tekenen
+        // Начало рисования
         function startDrawing(event) {
             isDrawing = true;
             const pos = event.type === 'mousedown'
@@ -192,7 +192,7 @@
             ctx.moveTo(pos.x, pos.y);
         }
 
-        // Teken
+        // Рисование
         function draw(event) {
             if (!isDrawing) return;
             const pos = event.type === 'mousemove'
@@ -204,7 +204,7 @@
             ctx.stroke();
         }
 
-        // Stop met tekenen
+        // Завершение рисования
         function stopDrawing() {
             isDrawing = false;
             ctx.closePath();
@@ -219,13 +219,13 @@
             };
         }
 
-        // Muis-gebeurtenissen
+        // События для мыши
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
 
-        // Touch-gebeurtenissen
+        // События для касания
         canvas.addEventListener('touchstart', (event) => {
             event.preventDefault();
             startDrawing(event);
@@ -241,7 +241,7 @@
             stopDrawing();
         });
 
-        // Wis het canvas
+        // Очистка холста
         document.getElementById('clearCanvas').addEventListener('click', () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (selectedLetter) drawTemplate(selectedLetter);
