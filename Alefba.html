@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изучение алфавита дари</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .alphabet, .numbers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .letter, .number {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #666;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .letter:active, .number:active {
+            background-color: #d1e7fd;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #pronunciation {
+            margin-top: 10px;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            margin: 20px auto;
+            background-color: #fff;
+            cursor: crosshair;
+            display: block;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Изучение алфавита дари</h1>
+    <p>Нажмите на букву или цифру, чтобы выбрать её для обведения!</p>
+
+    <div class="alphabet" id="alphabet"></div>
+    <div class="numbers" id="numbers"></div>
+
+    <div id="output"></div>
+    <div id="pronunciation"></div>
+
+    <h2>Обведи</h2>
+    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+    <p><button id="clearCanvas">Очистить</button></p>
+
+    <script>
+        // Алфавит дари с описаниями
+        const alphabet = [
+            { letter: 'ا', description: 'Алиф (А)' },
+            { letter: 'ب', description: 'Бе (Б)' },
+            { letter: 'پ', description: 'Пе (П)' },
+            // Добавьте остальные буквы...
+        ];
+
+        // Цифры с описаниями
+        const numbers = [
+            { number: '۰', description: 'Сифр (0)' },
+            { number: '۱', description: 'Як (1)' },
+            { number: '۲', description: 'Ду (2)' },
+            // Добавьте остальные цифры...
+        ];
+
+        const alphabetContainer = document.getElementById('alphabet');
+        const numbersContainer = document.getElementById('numbers');
+        const output = document.getElementById('output');
+        const pronunciation = document.getElementById('pronunciation');
