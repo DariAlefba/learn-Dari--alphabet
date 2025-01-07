@@ -219,6 +219,68 @@
             stopDrawing();
         });
 
+        // Рисование от руки - мышь
+function startDrawing(event) {
+    isDrawing = true;
+    ctx.beginPath();
+    const { offsetX, offsetY } = getEventCoordinates(event);
+    ctx.moveTo(offsetX, offsetY);
+}
+
+function draw(event) {
+    if (!isDrawing) return;
+    const { offsetX, offsetY } = getEventCoordinates(event);
+    ctx.lineTo(offsetX, offsetY);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+}
+
+function stopDrawing() {
+    isDrawing = false;
+    ctx.closePath();
+}
+
+// Получение координат события для мыши и касания
+function getEventCoordinates(event) {
+    if (event.type.startsWith('touch')) {
+        const touch = event.touches[0] || event.changedTouches[0];
+        const rect = canvas.getBoundingClientRect();
+        return {
+            offsetX: touch.clientX - rect.left,
+            offsetY: touch.clientY - rect.top
+        };
+    } else {
+        return {
+            offsetX: event.offsetX,
+            offsetY: event.offsetY
+        };
+    }
+}
+
+// События для мыши
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+// События для касания
+canvas.addEventListener('touchstart', (event) => {
+    event.preventDefault();
+    startDrawing(event);
+});
+
+canvas.addEventListener('touchmove', (event) => {
+    event.preventDefault();
+    draw(event);
+});
+
+canvas.addEventListener('touchend', (event) => {
+    event.preventDefault();
+    stopDrawing();
+});
+
+
         // Очистка холста
         document.getElementById('clearCanvas').addEventListener('click', () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
