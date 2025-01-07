@@ -197,6 +197,21 @@
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
+           // События для касания
+        canvas.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            startDrawing(event);
+        });
+
+        canvas.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            draw(event);
+        });
+
+        canvas.addEventListener('touchend', (event) => {
+            event.preventDefault();
+            stopDrawing();
+        });
 
         // Очистка холста
         document.getElementById('clearCanvas').addEventListener('click', () => {
