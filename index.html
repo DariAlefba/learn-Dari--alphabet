@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الافبای دری - از د تا ژ</title>
+   
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,6 +86,7 @@
             font-size: 16px;
             cursor: pointer;
         }
+    
     </style>
 </head>
 <body>
@@ -100,12 +101,15 @@
         <a href="lam_to_end.html">ل تا ن</a>
         <a href="lam_to_end1.html">و تا ی</a>
         <a href="index.html">بازگشت به صفحه اصلی</a>
+
+        
+         <a href="dari-words-alef.html">کلمات الف</a>
     </nav>
     
 
     <!-- Основной контент -->
     <main>
-        <h1>آموزش الفبای دری</h1>
+        <h1> آموزش حروف و اعداد. الفبای دری</h1>
         <p>روی هر حرف کلیک کنید تا بتوانید آن را تمرین کنید!</p>
 
 
@@ -193,54 +197,60 @@
     <p><button id="clearCanvas">Очистить</button></p>
 
     <script>
-        const alphabet = [
-            { letter: 'ا', description: 'Alef,Алиф (А)' },
-            { letter: 'ب', description: 'Bae, Бе (Б)' },
-            { letter: 'پ', description: 'Pae, Пе (П)' },
-            { letter: 'ت', description: 'Tae, Те (Т)' },
-            { letter: 'ث', description: 'Sae, Се (С)' },
-            { letter: 'ج', description: 'Jim, Джим (Дж)' },
-            { letter: 'چ', description: 'Chae, Че (Ч)' },
-            { letter: 'ح', description: 'Hae, Ха (h)' },
-            { letter: 'خ', description: 'Khae, Хе (Х)' },
-            { letter: 'د', description: 'Dal, Дал (Д)' },
-            { letter: 'ذ', description: 'Zal, Зал (З)' },
-            { letter: 'ر', description: 'Rae, Ре (Р)' },
-            { letter: 'ز', description: 'Zae,Зе (З)' },
-            { letter: 'ژ', description: 'Zhae, Же (Ж)' },
-            { letter: 'س', description: 'Sin, Син (С)' },
-            { letter: 'ش', description: 'Shin, Шин (Ш)' },
-            { letter: 'ص', description: 'Suad, Суад (С)' },
-            { letter: 'ض', description: 'Zuad,Зуад (З)' },
-            { letter: 'ط', description: 'Toi, Той (Т)' },
-            { letter: 'ظ', description: 'Zoi, Зой (З)' },
-            { letter: 'ع', description: 'Ain, Айн (\'А)' },
-            { letter: 'غ', description: 'Ghain, Гхайн (Г)' },
-            { letter: 'ف', description: 'Fae, Фе (Ф)' },
-            { letter: 'ق', description: 'Qhaf, Кхаф (Кх)' },
-            { letter: 'ک', description: 'Kaf, Каф (К)' },
-            { letter: 'گ', description: 'Gaf, Гаф (Г)' },
-            { letter: 'ل', description: 'Lam, Лам (Л)' },
-            { letter: 'م', description: 'Mim, Мим (М)' },
-            { letter: 'ن', description: 'Nun, Нун (Н)' },
-            { letter: 'و', description: 'Wow,Уау (В, у, о)' },
-            { letter: 'ه', description: 'Hae, Хе (h, a)' },
-            { letter: 'ی', description: 'Ya, Йе (Й, и, е,я)' },
-        ];
+        // Функция для воспроизведения звука
+function playSound(sound) {
+    const audio = new Audio(`sounds/${sound}.mp3`);
+    audio.play();
+}
 
-        const numbers = [
-            { number: '۰', description: 'Sefer, Сифр (0)' },
-            { number: '۱', description: 'Yak, Як (1)' },
-            { number: '۲', description: 'Doo, Ду (2)' },
-            { number: '۳', description: 'Sae,Се (3)' },
-            { number: '۴', description: 'Chor, Чор (4)' },
-            { number: '۵', description: 'Pange, Панч (5)' },
-            { number: '۶', description: 'Shash, Шаш (6)' },
-            { number: '۷', description: 'Aft, Афт (7)' },
-            { number: '۸', description: 'Asht, Ашт (8)' },
-            { number: '۹', description: 'No, Ну (9)' },
-            { number: '۱۰', description: 'Daa, Да (10)' },
-        ];
+        const alphabet = [
+    { letter: 'ا', description: 'Alef, Алиф (А)', sound: 'alef' },
+    { letter: 'ب', description: 'Bae, Бе (Б)', sound: 'bae' },
+    { letter: 'پ', description: 'Pae, Пе (П)', sound: 'pae' },
+    { letter: 'ت', description: 'Tae, Те (Т)', sound: 'tae' },
+    { letter: 'ث', description: 'Sae, Се (С)', sound: 'sae' },
+    { letter: 'ج', description: 'Jim, Джим (Дж)', sound: 'jim' },
+    { letter: 'چ', description: 'Chae, Че (Ч)', sound: 'chae' },
+    { letter: 'ح', description: 'Hae, Ха (h)', sound: 'hae' },
+    { letter: 'خ', description: 'Khae, Хе (Х)', sound: 'khae' },
+    { letter: 'د', description: 'Dal, Дал (Д)', sound: 'dal' },
+    { letter: 'ذ', description: 'Zal, Зал (З)', sound: 'zal' },
+    { letter: 'ر', description: 'Rae, Ре (Р)', sound: 'rae' },
+    { letter: 'ز', description: 'Zae, Зе (З)', sound: 'zae' },
+    { letter: 'ژ', description: 'Zhae, Же (Ж)', sound: 'zhae' },
+    { letter: 'س', description: 'Sin, Син (С)', sound: 'sin' },
+    { letter: 'ش', description: 'Shin, Шин (Ш)', sound: 'shin' },
+    { letter: 'ص', description: 'Suad, Суад (С)', sound: 'suad' },
+    { letter: 'ض', description: 'Zuad, Зуад (З)', sound: 'zuad' },
+    { letter: 'ط', description: 'Toi, Той (Т)', sound: 'toi' },
+    { letter: 'ظ', description: 'Zoi, Зой (З)', sound: 'zoi' },
+    { letter: 'ع', description: 'Ain, Айн (\'А)', sound: 'ain' },
+    { letter: 'غ', description: 'Ghain, Гхайн (Г)', sound: 'ghain' },
+    { letter: 'ف', description: 'Fae, Фе (Ф)', sound: 'fae' },
+    { letter: 'ق', description: 'Qhaf, Кхаф (Кх)', sound: 'qhaf' },
+    { letter: 'ک', description: 'Kaf, Каф (К)', sound: 'kaf' },
+    { letter: 'گ', description: 'Gaf, Гаф (Г)', sound: 'gaf' },
+    { letter: 'ل', description: 'Lam, Лам (Л)', sound: 'lam' },
+    { letter: 'م', description: 'Mim, Мим (М)', sound: 'mim' },
+    { letter: 'ن', description: 'Nun, Нун (Н)', sound: 'nun' },
+    { letter: 'و', description: 'Wow, Уау (В, у, о)', sound: 'wow' },
+    { letter: 'ه', description: 'Hae, Хе (h, a)', sound: 'hae2' },
+    { letter: 'ی', description: 'Ya, Йе (Й, и, е,я)', sound: 'ya' }
+];
+
+const numbers = [
+    { number: '۰', description: 'Sefer, Сифр (0)', sound: 'zero' },
+    { number: '۱', description: 'Yak, Як (1)', sound: 'one' },
+    { number: '۲', description: 'Doo, Ду (2)', sound: 'two' },
+    { number: '۳', description: 'Sae, Се (3)', sound: 'three' },
+    { number: '۴', description: 'Chor, Чор (4)', sound: 'four' },
+    { number: '۵', description: 'Pange, Панч (5)', sound: 'five' },
+    { number: '۶', description: 'Shash, Шаш (6)', sound: 'six' },
+    { number: '۷', description: 'Aft, Афт (7)', sound: 'seven' },
+    { number: '۸', description: 'Asht, Ашт (8)', sound: 'eight' },
+    { number: '۹', description: 'No, Ну (9)', sound: 'nine' },
+    { number: '۱۰', description: 'Daa, Да (10)', sound: 'ten' }
+];
 
         const alphabetContainer = document.getElementById('alphabet');
         const numbersContainer = document.getElementById('numbers');
@@ -360,6 +370,8 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (selectedLetter) drawTemplate(selectedLetter);
         });
+    
+
     </script>
 </body>
 </html>
