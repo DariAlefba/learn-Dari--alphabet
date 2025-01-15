@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Drawing Tool - پ</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #drawing-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        #drawing-area {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            border: 2px solid #ccc;
+            background: white;
+        }
+        #words-container {
+            flex: 0.3;
+            padding: 10px;
+            background-color: #eee;
+        }
+        .word {
+            margin: 5px 0;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        nav {
+            background-color: #eaeaea;
+            padding: 20px;
+            width: 150px;
+            min-height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            display: block;
+            margin-bottom: 15px;
+            color: #0056b3;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<!-- Навигация -->
+<nav>
+    <a href="aleph_to_se.html">ا تا ث</a>
+    <a href="jim_to_khe.html">ج تا خ</a>
+    <a href="dal_to_je.html">د تا ژ</a>
+    <a href="sin_to_duad.html">س تا ض</a>
+    <a href="to_to_gain.html">ط تا غ</a>
+    <a href="fe_to_gaf.html">ف تا گ</a>
+    <a href="lam_to_end.html">ل تا ن</a>
+    <a href="lam_to_end1.html">و تا ی</a>
+    <a href="index.html">بازگشت به صفحه اصلی</a>
+</nav>
+
+<div id="words-container">
+    <h3>کلمات با حرف "پ"</h3>
+    <div id="words-list">
+        <!-- Слова добавляются динамически -->
+    </div>
+</div>
+
+<div id="drawing-container">
+    <h3>رسم حرف "پ"</h3>
+    <div id="drawing-area"></div>
+    <button id="clear-button">پاک کردن تخته</button>
+</div>
+
+<script>
+    // Список слов с буквой "پ"
+    const words = [
+        "پدر", "پنجره", "پرده", "سپید", "چاپ", 
+        "پرنده", "پسر", "پل", "اپل", 
+        "پاپ", "سپاس", "اپراتور", "پلنگ", "پسته", 
+         "کپک", "تپه", "پاک"
+    ];
+
+    // Заполнение списка слов
+    const wordsContainer = document.getElementById('words-list');
+    words.forEach(word => {
+        const wordElement = document.createElement('div');
+        wordElement.classList.add('word');
+        
+        // Заменяем букву "پ" на красный цвет
+        wordElement.innerHTML = word.replace(/پ/g, '<span style="color: red;">پ</span>');
+        
+        wordElement.addEventListener('click', () => setDrawingWord(word));
+        wordsContainer.appendChild(wordElement);
+    });
+
+    // Поле для рисования
+    const drawingArea = document.getElementById('drawing-area');
+    const clearButton = document.getElementById('clear-button');
+
+    // Создаем canvas в поле для рисования
+    const canvas = document.createElement('canvas');
+    canvas.width = drawingArea.offsetWidth;
+    canvas.height = drawingArea.offsetHeight;
+    drawingArea.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    // Переменные для рисования
+    let isDrawing = false;
+
+    // Настройки кисти
+    ctx.lineWidth = 8; 
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000';
+
+    // Слушатели событий для рисования
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    clearButton.addEventListener('click', clearCanvas);
+
+    canvas.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        startDrawing(event.touches[0]);
+    });
+    canvas.addEventListener('touchmove', (event) => {
+        event.preventDefault();
+        draw(event.touches[0]);
+    });
+    canvas.addEventListener('touchend', (event) => {
+        event.preventDefault();
+        stopDrawing();
+    });
+
+    // Функции для рисования
+    function startDrawing(event) {
+        isDrawing = true;
+        const { offsetX, offsetY } = getEventCoordinates(event);
+        ctx.beginPath();
+        ctx.moveTo(offsetX, offsetY);
+    }
+
+    function draw(event) {
+        if (!isDrawing) return;
+        const { offsetX, offsetY } = getEventCoordinates(event);
+        ctx.lineTo(offsetX, offsetY);
+        ctx.stroke();
+    }
+
+    function stopDrawing() {
+        isDrawing = false;
+        ctx.closePath();
+    }
+
+    // Получение координат для событий мыши и касания
+    function getEventCoordinates(event) {
+        const rect = canvas.getBoundingClientRect();
+        if (event.clientX !== undefined) {
+            return {
+                offsetX: event.clientX - rect.left,
+                offsetY: event.clientY - rect.top
+            };
+        }
+        return {
+            offsetX: event.pageX - rect.left,
+            offsetY: event.pageY - rect.top
+        };
+    }
+
+    // Установка слова для рисования
+    function setDrawingWord(word) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawTemplate(word);
+    }
+
+    // Очистка canvas
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Отображение шаблона слова на canvas
+    function drawTemplate(word) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '100px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.globalAlpha = 0.3;
+        ctx.fillText(word, canvas.width / 2, canvas.height / 2);
+        ctx.globalAlpha = 1.0;
+    }
+</script>
+
+</body>
+</html>
