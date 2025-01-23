@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Drawing Tool - ا</title>
+    <title>Interactive Drawing Tool - ح</title>
     <style>
         body {
             display: flex;
@@ -37,7 +37,20 @@
             cursor: pointer;
             font-size: 1.2em;
         }
-        
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
         nav {
             background-color: #eaeaea;
             padding: 20px;
@@ -60,8 +73,8 @@
     </style>
 </head>
 <body>
-     <!-- Навигация -->
-   <nav>
+<!-- Навигация -->
+<nav>
     <a href="aleph_to_se.html">ا تا ث</a>
     <a href="jim_to_khe.html">ج تا خ</a>
     <a href="dal_to_je.html">د تا ژ</a>
@@ -74,63 +87,66 @@
 </nav>
 
 <div id="words-container">
-    <h3>Words List</h3>
+    <h3>کلمات با حرف "ح"</h3>
     <div id="words-list">
-        <!-- Words are dynamically populated -->
+        <!-- Слова добавляются динамически -->
     </div>
 </div>
 
 <div id="drawing-container">
+    <h3>رسم حرف "ح"</h3>
     <div id="drawing-area"></div>
+    <button id="clear-button">پاک کردن تخته</button>
 </div>
 
 <script>
-   // Words list with "Alef" in red
-const words = [
-    "آسمان", "اِبتدا", "آرزو", "آب", "الفبا", 
-    "باغبان", "آفتاب", "آرام", "دانا", "دندان", 
-    "حَیات", "دَریا", "آواز", "کِتاب"
-];
+    // Список слов с буквой "ح"
+    const words = [
+        "حرف", "حل", "حس", "حد", "سرحد", 
+        "محبت", "حساب", "محل", "بحر", "احوال", 
+        "حب", "حاکم", "سحر", "رحمت", "حساس", 
+        "حمایت", "حقیقت", "صحت", "حافظ", "صبح"
+    ];
 
-// Populate words list
-const wordsContainer = document.getElementById('words-list');
-words.forEach(word => {
-    const wordElement = document.createElement('div');
-    wordElement.classList.add('word');
-    
-    // Replace both "ا" and "آ" with the red span
-    wordElement.innerHTML = word.replace(/ا/g, '<span style="color: red;">ا</span>')
-                                 .replace(/آ/g, '<span style="color: red;">آ</span>');
-    
-    wordElement.addEventListener('click', () => setDrawingWord(word));
-    wordsContainer.appendChild(wordElement);
-});
-    // Drawing area
+    // Заполнение списка слов
+    const wordsContainer = document.getElementById('words-list');
+    words.forEach(word => {
+        const wordElement = document.createElement('div');
+        wordElement.classList.add('word');
+        
+        // Заменяем букву "ح" на красный цвет
+        wordElement.innerHTML = word.replace(/ح/g, '<span style="color: red;">ح</span>');
+        
+        wordElement.addEventListener('click', () => setDrawingWord(word));
+        wordsContainer.appendChild(wordElement);
+    });
+
+    // Поле для рисования
     const drawingArea = document.getElementById('drawing-area');
+    const clearButton = document.getElementById('clear-button');
 
-    // Current drawing word
-    let currentWord = '';
-
-    // Create a canvas in the drawing area
+    // Создаем canvas в поле для рисования
     const canvas = document.createElement('canvas');
     canvas.width = drawingArea.offsetWidth;
     canvas.height = drawingArea.offsetHeight;
     drawingArea.appendChild(canvas);
     const ctx = canvas.getContext('2d');
 
-    // Variables for drawing
+    // Переменные для рисования
     let isDrawing = false;
 
-    // Brush settings
-    ctx.lineWidth = 8; // Increased brush size
+    // Настройки кисти
+    ctx.lineWidth = 8; 
     ctx.lineCap = 'round';
     ctx.strokeStyle = '#000';
 
-    // Event listeners for drawing
+    // Слушатели событий для рисования
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
+
+    clearButton.addEventListener('click', clearCanvas);
 
     canvas.addEventListener('touchstart', (event) => {
         event.preventDefault();
@@ -145,6 +161,7 @@ words.forEach(word => {
         stopDrawing();
     });
 
+    // Функции для рисования
     function startDrawing(event) {
         isDrawing = true;
         const { offsetX, offsetY } = getEventCoordinates(event);
@@ -164,7 +181,7 @@ words.forEach(word => {
         ctx.closePath();
     }
 
-    // Get coordinates for mouse and touch events
+    // Получение координат для событий мыши и касания
     function getEventCoordinates(event) {
         const rect = canvas.getBoundingClientRect();
         if (event.clientX !== undefined) {
@@ -179,14 +196,18 @@ words.forEach(word => {
         };
     }
 
-    // Set the word to be drawn
+    // Установка слова для рисования
     function setDrawingWord(word) {
-        currentWord = word.replace('ا', 'ا');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawTemplate(currentWord);
+        drawTemplate(word);
     }
 
-    // Draw template word on canvas
+    // Очистка canvas
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Отображение шаблона слова на canvas
     function drawTemplate(word) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = '100px Arial';
@@ -196,7 +217,6 @@ words.forEach(word => {
         ctx.fillText(word, canvas.width / 2, canvas.height / 2);
         ctx.globalAlpha = 1.0;
     }
-    
 </script>
 
 </body>

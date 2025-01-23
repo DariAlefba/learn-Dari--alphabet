@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Drawing Tool - ا</title>
+    <title>Interactive Drawing Tool - خ</title>
     <style>
         body {
             display: flex;
@@ -60,8 +60,8 @@
     </style>
 </head>
 <body>
-     <!-- Навигация -->
-   <nav>
+   <!-- Навигация -->
+<nav>
     <a href="aleph_to_se.html">ا تا ث</a>
     <a href="jim_to_khe.html">ج تا خ</a>
     <a href="dal_to_je.html">د تا ژ</a>
@@ -74,22 +74,26 @@
 </nav>
 
 <div id="words-container">
-    <h3>Words List</h3>
+    <h3> کلمات با حرف "خ"</h3>
     <div id="words-list">
-        <!-- Words are dynamically populated -->
+        <!-- Слова добавляются динамически -->
     </div>
 </div>
 
 <div id="drawing-container">
+    <h3> رسم حرف "خ"</h3>
     <div id="drawing-area"></div>
+    <button id="clear-button">پاک کردن تخته</button>
 </div>
 
 <script>
-   // Words list with "Alef" in red
+   // Words list with "خ" in various positions
 const words = [
-    "آسمان", "اِبتدا", "آرزو", "آب", "الفبا", 
-    "باغبان", "آفتاب", "آرام", "دانا", "دندان", 
-    "حَیات", "دَریا", "آواز", "کِتاب"
+    "خنده", "خانه", "خداحافظ", "خود", "خبر", 
+    "خواب", "خالی", "خدا", "خشک", "خسته", 
+    "مرچ", "خرگوش", "خدمت", "خیال", "خرید", 
+    "خوشحال", "مارچ", "خاص", "خروس", "", 
+    "چراغ", "پخش", "خوشبختی", "پیچ", "سیخ"
 ];
 
 // Populate words list
@@ -98,9 +102,8 @@ words.forEach(word => {
     const wordElement = document.createElement('div');
     wordElement.classList.add('word');
     
-    // Replace both "ا" and "آ" with the red span
-    wordElement.innerHTML = word.replace(/ا/g, '<span style="color: red;">ا</span>')
-                                 .replace(/آ/g, '<span style="color: red;">آ</span>');
+    // Replace the letter "خ" with the red span
+    wordElement.innerHTML = word.replace(/خ/g, '<span style="color: red;">خ</span>');
     
     wordElement.addEventListener('click', () => setDrawingWord(word));
     wordsContainer.appendChild(wordElement);
@@ -181,7 +184,7 @@ words.forEach(word => {
 
     // Set the word to be drawn
     function setDrawingWord(word) {
-        currentWord = word.replace('ا', 'ا');
+        currentWord = word.replace('خ', 'خ');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawTemplate(currentWord);
     }
