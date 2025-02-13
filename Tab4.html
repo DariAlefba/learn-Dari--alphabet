@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица умножения на 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .problem-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .problem {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        input {
+            width: 60px;
+            font-size: 20px;
+            text-align: center;
+            margin: 0 10px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Решите примеры на умножение / Solve the multiplication problems / Los de vermenigvuldigingsopgaven op / د ضرب مسئلې حل کړئ</h1>
+    <div class="problem-container" id="problems"></div>
+    
+    <script>
+        const compliments = [
+            "Молодец! / Well done! / Goed gedaan! / آفرین!", 
+            "Умница! / Clever! / Knap! / ځيرک!", 
+            "Прекрасно справляешься! / You’re doing great! / Je doet het geweldig! / ته ښه کوې!", 
+            "Отлично! / Excellent! / Uitstekend! / عالي!"
+        ];
+
+        function generateMultiplicationProblems() {
+            const problemContainer = document.getElementById("problems");
+            problemContainer.innerHTML = "";
+            
+            for (let i = 1; i <= 10; i++) {
+                let num1 = 4;
+                let num2 = i;
+                
+                const problemDiv = document.createElement("div");
+                problemDiv.className = "problem";
+                problemDiv.innerHTML = `
+                    <span>${num1} × ${num2} = </span>
+                    <input type="number" id="answer${i}" />
+                    <button onclick="checkAnswer(${num1}, ${num2}, ${i})">Проверить</button>
+                    <span id="result${i}"></span>
+                `;
+                problemContainer.appendChild(problemDiv);
+            }
+        }
+
+        function checkAnswer(num1, num2, index) {
+            const userAnswer = parseInt(document.getElementById(`answer${index}`).value, 10);
+            const correctAnswer = num1 * num2;
+            const resultText = document.getElementById(`result${index}`);
+
+            if (userAnswer === correctAnswer) {
+                resultText.innerText = compliments[Math.floor(Math.random() * compliments.length)];
+                resultText.className = "correct";
+            } else {
+                resultText.innerText = "Попробуй ещё раз! / Try again! / Probeer opnieuw! / بیا کوښښ وکړه!";
+                resultText.className = "incorrect";
+            }
+        }
+
+        generateMultiplicationProblems();
+    </script>
+</body>
+</html>
