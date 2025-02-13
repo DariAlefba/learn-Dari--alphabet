@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вычитание с заимствованием</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .problem-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .problem {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        input {
+            width: 60px;
+            font-size: 20px;
+            text-align: center;
+            margin: 0 10px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        #nextSetBtn {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Решите математический пример / Solve the math problem / Los de wiskundige som op / ریاضياتي مسئله حل کړئ</h1>
+    <div class="problem-container" id="problems"></div>
+    <button id="nextSetBtn" onclick="generateProblems()">Следующий набор / Next set / Volgende set / بل سیټ</button>
+    
+    <script>
+        const compliments = [
+            "Молодец! / Well done! / Goed gedaan! / آفرین!", 
+            "Умница! / Clever! / Knap! / ځيرک!", 
+            "Прекрасно справляешься! / You’re doing great! / Je doet het geweldig! / ته ښه کوې!", 
+            "Отлично! / Excellent! / Uitstekend! / عالي!"
+        ];
+        let problemsSolved = 0;
+
+        function generateProblems() {
+            const problemContainer = document.getElementById("problems");
+            problemContainer.innerHTML = "";
+            problemsSolved = 0;
+            document.getElementById("nextSetBtn").style.display = "none";
+            
+            for (let i = 0; i < 5; i++) {
+                let num1, num2;
+                do {
+                    num1 = Math.floor(Math.random() * 40) + 60; // от 60 до 99
+                    num2 = Math.floor(Math.random() * 30) + 10; // от 10 до 39
+                } while (num1 % 10 >= num2 % 10); // Убедиться, что нужна заемная десятка
+                
+                const problemDiv = document.createElement("div");
+                problemDiv.className = "problem";
+                problemDiv.innerHTML = `
+                    <span>${num1} - ${num2} = </span>
+                    <input type="number" id="answer${i}" />
+                    <button onclick="checkAnswer(${num1}, ${num2}, ${i})">Проверить</button>
+                    <span id="result${i}"></span>
+                `;
+                problemContainer.appendChild(problemDiv);
+            }
+        }
+
+        function checkAnswer(num1, num2, index) {
+            const userAnswer = parseInt(document.getElementById(`answer${index}`).value, 10);
+            const correctAnswer = num1 - num2;
+            const resultText = document.getElementById(`result${index}`);
+
+            if (userAnswer === correctAnswer) {
+                resultText.innerText = compliments[Math.floor(Math.random() * compliments.length)];
+                resultText.className = "correct";
+                problemsSolved++;
+            } else {
+                resultText.innerText = "Попробуй ещё раз! / Try again! / Probeer opnieuw! / بیا کوښښ وکړه!";
+                resultText.className = "incorrect";
+            }
+
+            if (problemsSolved === 5) {
+                document.getElementById("nextSetBtn").style.display = "block";
+            }
+        }
+
+        generateProblems();
+    </script>
+</body>
+</html>
